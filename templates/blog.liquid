@@ -1,0 +1,22 @@
+<div>
+{% paginate articles by 20 %}
+                          {% for article in articles %}
+  <a name="article-{{ article.id }}" ></a>
+                          <div class="blog" class="article {% if forloop.first %}first{% endif %}">
+                            <h2><a href="{{ article.url }}" style="color: #443F3C;">{{ article.title }}</a></h2>
+                            <p class="date">Опубликовано {{ article.created_at | date: "%d.%m.%Y, %H:%M" }}{% if article.author != null %}, автор {{article.author }}{% endif %}</p>
+                            <div class="blog_content">  {{ article.preview }}</div>
+                            <div class="blog-details">
+                              <a href="{{ article.url }}">читать далее &raquo;</a>
+                              {% if blog.comments_enabled? %}
+                              &nbsp;&nbsp;<a href="{{article.url}}#comments">комментарии ({{ article.comments_count }})</a>
+                              {% endif %}
+                            </div>
+                          </div>
+                          <br />
+                          {% endfor %}
+                          {% if paginate.pages > 1 %}
+                          {% include 'pagination' %}
+                          {% endif %}
+                          {% endpaginate %}
+</div>

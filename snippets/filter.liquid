@@ -1,0 +1,54 @@
+<script type="text/javascript">
+ $(function(){
+   $('.category-props a').click(function(e){
+         e.preventDefault();
+          
+         if($(this).hasClass('active')) {
+            $(this).removeClass('active');
+            $(this).next('input').attr('disabled','disabled');
+            $('#characteristics').submit();
+          } else {
+            $(this).addClass('active');
+            $(this).next('input').removeAttr('disabled');
+            $('#characteristics').submit();
+          }            
+   });  
+ });
+</script>
+ <form id="characteristics" action="{{collection.url}}" method="get">
+   
+<div style="display: none;">    
+     <select name="order"  id="sort-form">  
+       {{ "" | select_option: order, "" }} 
+       {{ "price"  | select_option: order, "По возрастанию цены" }}
+       {{ "descending_price"  | select_option: order, "По убыванию цены" }} 
+       {{ "title"  | select_option: order, "Алфавиту А-Я" }} 
+       {{ "descending_title"  | select_option: order, "Алфавиту Я-А" }} 
+       {{ "age"  | select_option: order, "Дате добавления" }} 
+     </select>
+     </div>
+    {% if collection.properties.size != 0 %}
+<div class="side-block">
+			 <div class="side-block-dotted">
+               <ul class="category-props">
+                   {% for property in collection.properties %}
+			   	
+                 <li>{{property.name}}
+                      
+			   	<ul>
+                  {% for characteristic in property.characteristics %}
+			   		<li><a href='{{characteristic.url}}' class="{% if characteristic.current? %}active{% endif %}">{{characteristic.title}}</a>
+                      <input name="characteristics[]" type="hidden" value="{{characteristic.id}}" {% unless characteristic.current? %} disabled='disabled' {% endunless %} />
+                  </li>
+                  {% endfor %}			   		
+			   	</ul>
+                 </li>
+                 {% endfor %}               
+			   </ul>
+			   <div class="button">
+                 <span><input type="button" value="Сбросить параметры" onclick="document.location.href='{{collection.url}}'"/></span>
+               </div>
+			 </div>
+			</div>
+   {% endif %}
+</form>

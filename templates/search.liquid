@@ -1,0 +1,23 @@
+<div class="search-prods">
+{% if search.performed? %}
+{% if search.results == empty %}
+<h2>По запросу "<span class="color">{{search.query | escape}}</span>" ничего не найдено.</h2>
+{% else %}
+{% paginate results by 20 %}
+<h2>По запросу "<span class="color">{{search.query | escape}}</span>" найдено
+  <span class="color">{{search.results.size}}</span> товаров.</h2>
+<div class="prodWrap">
+  {% for product in results %}
+  {% include 'product_block' %}
+  {% endfor %}
+  <div class="clear"></div>
+</div> 
+{% if paginate.pages > 1 %}
+{% include 'pagination' %}
+{% endif %}
+{% endpaginate %}
+{% endif %}
+{% else %}
+<h2>Введите ключевые слова для поиска.</h2>
+{% endif %}
+</div>

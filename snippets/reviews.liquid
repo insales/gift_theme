@@ -1,0 +1,128 @@
+<link type="text/css" rel="stylesheet" media="all" href="{{ 'jquery.rating.css' | asset_url }}" />  
+ <script type="text/javascript" src="{{ 'jquery.MetaData.js' | asset_url }}"> </script>
+  <script type="text/javascript" src="{{ 'jquery.rating.pack.js' | asset_url }}"> </script>
+<script type="text/javascript">
+ $.fn.rating.options.cancel = 'Сбросить';
+ $(function(){
+   //$("ul.reviews").hide();
+    var anchor = $(document).attr('location').hash;
+   if (anchor == "#reviews" || anchor == "#review_form") {
+     $(".reviews").show();
+     $('.review-tab').trigger('click');
+   }
+    $("#reviews_link").click(function(e){
+        e.preventDefault();
+        $("ul.reviews").toggle();
+    });
+ });
+</script>
+
+<div class="reviews-section clear">
+				<section class="seo-content reviews-block clear">
+				 <div class="seo-content-dotted">
+				 	<div class="reviews-wrap">
+				 	<div id="reviews">
+  <h2> <a name="reviews" id="reviews_link" href="#"> Отзывы: {{product.reviews_count}}</a> </h2>
+  <!-- List all reviews -->
+
+  {% if product.reviews == empty %}
+    <p class="box"> <em> Пока нет отзывов</em> </p>
+  {% else %}
+    {% if product.rating %}
+        <div class="rating_wrapper">
+            <label class="rating_label"> Рейтинг товара:</label>
+            {% for i in (1..5) %}
+              <input name='review[rating]' type='radio' class='star' value='{{i}}' disabled="disabled" {% if product.rating == i%}checked="checked"{% endif %}/>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <ul class="reviews">
+    {% for review in product.reviews %}
+      <li class="{% if forloop.last %}last{% endif %}">
+        <div class="reviews">
+          {{ review.content | newline_to_br }}
+        </div>
+        {% if review.rating %}<small> Оценка: {{ review.rating }}</small> {% endif %}
+        <div class="review_details font">
+          {{ review.author }} , {{ review.created_at | date: "%d.%m.%Y" }}
+        </div>
+      </li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+</div>
+                      
+                      <!-- форма отзыва -->
+<div id="review_form">
+  <!-- Review Form -->
+  {% form review %}
+    <h2>Оставить отзыв</h2>
+    {% if form.posted_successfully? %}
+      {% if account.reviews_moderated? %}
+        <div class="notice">
+          Отзыв успешно отправлен.<br />
+          Он будет промодерирован владельцем магазина перед публикацией.
+        </div>
+      {% else %}
+        <div class="notice"> Отзыв добавлен.</div>
+      {% endif %}
+    {% endif %}
+    <div class="rating_wrapper">
+        <label for="rating" class="rating_label fl"> Оцените товар:</label>
+        {% for i in (1..5) %}
+          <input name='review[rating]' type='radio' class='star' value='{{i}}'/>
+        {% endfor %}
+    </div>
+   <div style="clear: both;"> </div>
+    {% if review.errors.size > 0 %}
+      <div class="notice error"> Не все поля заполнены правильно!</div>
+    {% endif %}
+
+    
+        <label for="review_author" class="{% if review.errors contains 'author' %}error{% endif %}"> Имя</label>
+        <input type="text" id="review_author" name="review[author]" value="{{review.author}}" class="txt {% if review.errors contains 'author' %}input-error{% endif %}" />
+  
+        <label for="review_email" class="{% if review.errors contains 'author' %}error{% endif %}"> E-mail</label>
+        <input type="text" id="review_email" name="review[email]" value="{{review.email}}" class="txt {% if review.errors contains 'email' %}input-error{% endif %}" />
+       
+ 
+  <label for="review_body" class="{% if review.errors contains 'author' %}error{% endif %}"> Отзыв</label> 
+        <textarea id="review_body" name="review[content]" cols="32" rows="4" class="{% if review.errors contains 'content' %}input-error{% endif %}"> {{review.content}}</textarea> 
+      {% if review.captcha_enabled? %}
+            <div id="captcha">
+                <div id="captcha_challenge">
+                    {{ review | captcha_challenge }}
+                </div>
+                <input type="text" size="30" name="review[captcha_solution]" id="review_captcha_solution" class="txt textfield {% if review.errors contains 'captcha_solution' %}input-error{% endif %}">
+                <br/><small>Наберите текст, изображённый на картинке</small>
+            </div>
+        {% endif %}
+  <p class="small font" style="margin-top: 6px;"> Все поля обязательны к заполнению</p>
+  <input type="submit" class="button" id="submit-review" value="Отправить" style="font-size: 13px; display: none;"  />
+    
+
+    {% if account.reviews_moderated? %}
+      <div id="review_moderation_warning"> Перед публикацией отзывы проходят модерацию</div>
+    {% endif %}
+  {% endform %}
+</div>
+				 	</div>
+				 </div>
+				</section>
+				<div class="buy-button button fl">
+				 <span>
+				  <input type="button"  onclick="$('#submit-review').trigger('click');" value="Отправить отзыв">
+				 </span>
+				</div>
+				<div class="clear"></div>
+			</div>
+
+
+
+{% if account.reviews_enabled? %}
+<!-- список отзывов -->
+
+
+
+
+{% endif %}

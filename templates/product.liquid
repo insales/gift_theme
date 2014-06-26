@@ -1,0 +1,163 @@
+<script type="text/javascript">
+  $(function(){
+   var Large = $(".big-img"), Thumbs = $(".gallery a");
+   Thumbs.hover(function(){ 
+   $(".big-img img").attr("src",$(this).attr("data-img"));
+   Large.attr("href",$(this).attr("href"));  
+   });
+ });
+</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $(".fancybox").fancybox();
+  });
+</script> 
+<div class="photo fl">
+  <a href="{{product.first_image.original_url}}" title="{{product.title | escape}}" class="big-img {% if product.images.size > 1 %}{% else %}fancybox{% endif %}" {% if product.images.size > 1 %}
+    onClick="$('.gallery a[href$=\''+$(this).attr('href')+'\']').click(); return false;"     
+    {% endif %}>
+    <img src="{{product.first_image.large_url}}" class="img" alt="{{product.title | escape}}" />
+  </a>
+  {% if product.images.size > 1 %}
+   <div class="gallery">
+     {% for image in product.images %}     
+     <a href="{{image.original_url}}" rel="group" data-img="{{image.large_url}}" title="{{product.title | escape}}" class="fancybox {% cycle 'group2':'','','side' %}"><img src="{{image.thumb_url}}" /></a>     
+     {% endfor %}
+   </div>
+   {% endif %}
+</div>
+<div class="product-info fl">
+  <div class="product-info-dashed">
+    <h1>{{product.title}}</h1>
+    {% if product.sku %}
+    <p class="sku small">Артикул: <span id="sku-field">{{product.sku}}</span></p>
+    {% endif %}
+    
+{% if product.properties.size > 0 %}
+              <table class="props">
+                {% for property in product.properties %}
+                   <tr>
+                     <td>{{property.name}}</td>
+                    
+                    <td>
+                       {% for characteristic in property.characteristics %}
+                       {{characteristic.name}}{% unless forloop.last %},{% endunless %}
+                       {% endfor %}
+                     </td>
+                </tr>
+                {% endfor %}
+                  </table>
+                  {% endif %}
+    {% if product.short_description %}
+    <div class="descr">
+      {{product.short_description}}
+    </div>
+    {% endif %}
+    <form action="{{ cart_url }}" method="post" id="order">
+      {% if product.show_variants? %}
+      <div class="variants ovh">
+        <select name="variant_id" id="variant-select">
+          {% for variant in product.variants %}
+          <option value="{{ variant.id }}">{{ variant.title | escape }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      {% else %}
+      <input type="hidden" name="variant_id" value="{{ product.variants.first.id }}" />
+      {% endif %} 
+      
+      <div class="buyzone">
+        <label class="small">Количество</label>
+        <input type="text" class="qty" name="quantity" value="1" />
+        <span class="price"><del id="old-field">{{product.old_price | money}}</del><span id="price-field">{{product.sale_price | money}}</span></span>	        
+      </div>
+      
+      <div class="buy-button button fl">
+        <span>
+          <input type="submit" class="buy add_button" value="КУПИТЬ" />
+        </span>
+      </div>
+      <div class="clear"></div>
+    </form>		
+    <ul class="soc-buttons">
+      <script type="text/javascript" src="//yandex.st/share/share.js" charset="utf-8"></script>
+      <div class="yashare-auto-init" data-yashareL10n="ru" data-yashareType="icon" data-yashareQuickServices="yaru,vkontakte,facebook,twitter,odnoklassniki,moimir"></div> 
+    </ul>	
+    {% if product.description %}
+    <h2>Описание</h2>		 
+    <div class="editor-content descr">
+      {{product.description}}
+    </div>	 
+    {% endif %}
+  </div>		
+</div>
+<div class="clear"></div>
+
+{% if product.related_products.size > 0 %}
+<div class="search-prods">
+<h2>Сопутствующие товары</h2>
+{% for product in product.related_products %}
+	{% include 'product_block' %}
+{% endfor %}
+<div class="clear"></div>
+</div>
+{% endif %}
+
+{% if product.similar_products.size > 0 %}
+<div class="search-prods">
+<h2>Аналогичные товары</h2>
+{% for product in product.similar_products %}
+	{% include 'product_block' %}
+{% endfor %}
+<div class="clear"></div>
+</div>
+{% endif %}
+
+
+
+{% if account.reviews_enabled? %}	
+	{% include 'reviews' %}
+{% endif %}
+
+<div class="paginate-prods">
+  <a href="{% if collection.previous_product %}{{ collection.previous_product.url }}{% else %}{{ collection.products.last.url }}{% endif %}" class="prev-prod fl">Предыдущий товар</a>
+  <a href="{% if collection.next_product %}{{ collection.next_product.url }} {% else %}{{ collection.products.first.url }}{% endif %}" class="next-prod fr">Следующий товар</a>
+</div>	
+
+<script type="text/javascript">
+   $(function() {
+      {% if product.available == false %}
+         {% if settings.block_button %}
+         $('.add_button').val('Отсутствует').attr('disabled','disabled');
+         {% else %}
+         $('.add_button').val('Под заказ');
+         {% endif %} 
+      {% endif %}
+        var selectCallback = function(variant, selector) {
+           if (variant && variant.available == true) {
+               // selected a valid variant
+                $('.add_button').val('Купить').removeAttr('disabled');    
+                $('#price-field').html(InSales.formatMoney(variant.price, "{{money_with_currency_format}}"));  // update price field
+                $('#old-field').html(InSales.formatMoney(variant.old_price, "{{money_with_currency_format}}"));  // update old_price field
+                $('#sku-field').html(variant.sku);  // update sku field                
+           } else {
+               // variant doesn't exist
+                 {% if settings.block_button %}
+         $('.add_button').val('Отсутствует').attr('disabled','disabled');
+         {% else %}
+         $('.add_button').val('Под заказ');
+         {% endif %}      
+                  if(variant){                     
+                     $('#price-field').html(InSales.formatMoney(variant.price, "{{money_with_currency_format}}"));  // update price field
+                     $('#old-field').html(InSales.formatMoney(variant.old_price, "{{money_with_currency_format}}"));  // update old_price field
+                     $('#sku-field').html(variant.sku);  // update sku field
+                 } else {
+                     $('#price-field').html("Модификация отсутствует");                      
+                     $('#old-field').html('');  // clear old_price field
+                     $('#sku-field').html('');  // clear sku field
+                 }
+           }
+        };
+        new InSales.OptionSelectors('variant-select', { product: {{product | json}}, onVariantSelected: selectCallback, filterOptionValues: true }); 
+   });
+</script>

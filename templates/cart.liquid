@@ -1,0 +1,104 @@
+<script type="text/javascript">
+  $(function(){   
+    $('#cartform').bind('keypress', function(e) {    
+      if(e.keyCode==13)    {     
+        $(this).submit();     
+        return false;    
+      }  
+    }); 
+  });
+</script>
+<h1 class="dotted"><span>Корзина</span></h1>
+<div class="cart-wrap">
+{% if cart.items != empty %}
+<form action="/cart_items" method="post" id="cartform">   
+  <input type="hidden" value="put" name="_method" />   
+  <input type="hidden" name="lang"value="{{ language.locale }}" />
+  <div class="dashed2"></div>
+  <table class="cart-table">
+    <col style="width: 1%;" />
+    <col />
+    <col style="width: 1%;" />
+    <col style="width: 1%;" />    
+    <col style="width: 1%;" />
+    <col style="width: 1%;" />
+    <tbody>
+      {% for item in cart.items %}
+      <tr id="cart_order_line_{{ item.id }}" class="{% if forloop.last %}last{% endif %} {% if forloop.first %}first{% endif %}">
+        <td class="img">
+          <a href="{{item.product.url}}">
+            <img src="{{item.product.first_image.thumb_url}}" />
+          </a>
+        </td>
+        <td class="item-title"> <a href="{{item.product.url}}" class="decoration main-color"> {{item.product.title}}</a> 
+        </td>
+        <td class="vars">
+          {% for variant in item.product.variants %} 
+          {% if variant.id == item.id %}         
+          {% for value in variant.option_values %}     
+          {{value.option_name.title}}: {{ value.title }} <br />   
+          {% endfor %}
+          {% endif %}
+          {% endfor %}
+        </td>
+        <td class="quantity"> Количество <input type="text" class="qwnt" value="{{ item.quantity }}"  price="{{ item.sale_price }}" name="cart[quantity][{{ item.id }}]" size="3" maxlength="4" autocomplete="off"> 
+        </td>
+        <td class="price"> {{ item.sale_price | money }}       
+        </td>
+        <td class="del"> <a href="{{item.url}}" iid="delete_{{ item.id }}"> &times;</a>        
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <div class="dashed2"></div>
+  {% if cart.enable_coupon? %}
+  <div class="coupon fl">
+    <label>Купон</label>
+    <input type="text" class="txt"  value="{{ cart.coupon }}"  name="cart[coupon]" />&nbsp;<input type="button" class="small-button" onclick="this.form.submit(false)" value="Применить" />
+    {% if cart.invalid_coupon? %}<p class="bad"> Указан несуществующий купон, <br /> убедитесь что он введен верно.</p>{% endif%}
+  </div>
+  {% endif %}
+  <div class="buy-button order-button button fr">
+    <span>
+      <input type="submit" name="make_order" id="create_order"  value="Оформить">
+    </span>
+  </div> 
+ <div class="fr sub-total">
+   <div class="total-block">
+     Итого: <span id="total_price" class="price total_amount_s total_amount"> {{ cart.items_price | money}}</span>
+   </div>
+  </div>
+  {% if cart.discounts %} 
+  <div class="discounts fr sub-total">
+    {% for discount in cart.discounts %}
+    {{ discount.description }}: <span class="price"> &minus;{{ discount.amount | money }}</span>
+    {% endfor %}
+  </div>
+  {% endif %}
+</form>  
+<div class="clear" style="margin-bottom: 60px;">&nbsp;</div>
+<div class="cart-banner">
+  {{blocks.cart-banner.content}}
+</div>
+<div class="search-prods">
+  <h2>Сопутствующие товары</h2>
+  {% assign related_ids = '' %}
+  {% for item in cart.items %}
+  {% for product in item.product.related_products %}
+  {% capture prod_id %}{{product.id}} {% endcapture %}
+  {% unless related_ids contains prod_id %}
+  {% include 'product_block' %}
+  {% endunless %}
+  {% assign related_ids = related_ids | append: prod_id %}
+  {% endfor %}
+  {% endfor %} 
+  
+  <div class="clear"></div>
+</div> 
+<script> $(function(){ cartTriggers(); }); </script>   
+</div>
+<p class="cart-message" style="display: none;"> Ваша корзина пуста</p>
+{% else %}
+<p class="cart-message"> Ваша корзина пуста</p>
+{% endif %}

@@ -1,0 +1,708 @@
+<meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <fieldset>
+      <legend>ОБЩЕЕ</legend>
+      <table>
+             
+        <tr>
+          <th>
+            <label for="use_favicon">Использовать свою favicon?</label>
+          </th>
+          <td>
+            <input name="use_favicon" id="use_favicon" value="1" type="checkbox" />
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="favicon">Загрузить favicon (ico)</label>
+          </th>
+          <td>
+            <input type="file" id="favicon" name="favicon.ico" data-max-width="32" data-max-height="32" />
+            <small>Максимальная ширина и высота 32px</small>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <h2>Фон страницы</h2>
+            <hr />
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="bg_color">Цвет фона</label>
+          </th>
+          <td>
+            <input name="bg_color" class="color" id="bg_color" value="#ECECEC" />
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="use_bg_image">Использовать фоновое изображение?</label>
+          </th>
+          <td>
+            <input name="use_bg_image" id="use_bg_image" value="1" type="checkbox" checked />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label for="bg_image">Выбрать</label>
+          </td>
+          <td>
+            <select name="bg_image" id="bg_image">
+              <option value="bg.png" selected>Вариант 1</option>
+              <option value="bg2.png">Вариант 2</option>
+              <option class="loaded" value="bg-loaded.png">Загруженное изображение</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="loaded_bg">Загрузить своё</label>
+          </th>
+          <td>
+            <input name="bg-loaded.png" id="loaded_bg" type="file" />
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="bg_image_position">Местоположение</label>
+          </th>
+          <td id="bg_image_position">
+            <select name="bg_image_y_position" id="bg_image_y_position">
+              <option value="top">Сверху</option>
+              <option value="center" selected>По центру</option>
+              <option value="bottom">Снизу</option>
+            </select>
+            <select name="bg_image_x_position" id="bg_image_x_position">
+              <option selected value="left">Слева</option>
+              <option value="center">По центру</option>
+              <option value="right">Справа</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="bg_image_repeat">Повтор</label>
+          </th>
+          <td>
+            <select name="bg_image_repeat" id="bg_image_repeat">
+              <option value="no-repeat">Не повторять</option>
+              <option value="repeat-x">По горизонтали</option>
+              <option value="repeat-y">По вертикали</option>
+              <option value="repeat" selected>Во всех направлениях</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="bg_image_attachment">Прокрутка</label>
+          </th>
+          <td>
+            <select name="bg_image_attachment" id="bg_image_attachment">
+              <option selected value="scroll">Прокручивать вместе со страницей</option>
+              <option value="fixed">Оставлять на месте</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <h2>Шрифт</h2>
+            <hr />
+          </td>
+        </tr>
+        
+        <tr>
+                    <th><label for="use_font">Сменить шрифт?</label></th>
+                    <td><input name="use_font" id="use_font" value="1" type="checkbox" /></td>
+                </tr>
+        <tr>
+            <th><label for="regular_font">Шрифт</label></th>
+            <td>
+                <select name="regular_font" class="font" id="regular_font"><option value="Arial, sans-serif" selected></option></select>
+            </td>
+        </tr>
+         <tr>
+        <th><label for="main_color">Цвет основного шрифта</label></th>
+        <td><input name="main_color" class="color" id="main_color" value="#463F3D" /></td>
+    </tr>
+         <tr>
+        <th><label for="main_color2">Цвет контрастного шрифта</label></th>
+        <td><input name="main_color2" class="color" id="main_color2" value="#A5A3A2" /></td>
+    </tr>
+         <tr>
+        <th><label for="link_color">Цвет ссылок</label></th>
+        <td><input name="link_color" class="color" id="link_color" value="#FE6316" /></td>
+    </tr>
+        <tr>
+        <th><label for="price_color">Цвет цены</label></th>
+        <td><input name="price_color" class="color" id="price_color" value="#FE6316" /></td>
+    </tr>
+        <tr>
+        <th><label for="old_price_color">Цвет старой цены</label></th>
+        <td><input name="old_price_color" class="color" id="old_price_color" value="#a5a3a2" /></td>
+    </tr>
+        
+        <tr>
+          <td colspan="2">
+            <h2>Пунктир/Подложки</h2>
+            <hr />
+          </td>
+        </tr>
+        <tr>
+        <th><label for="dotted_color">Цвет пунктира 1</label></th>
+        <td><input name="dotted_color" class="color" id="dotted_color" value="#6B6664" /></td>
+    </tr>
+<tr>
+  <th><label for="dotted_color2">Цвет пунктира 2/ Цвет границ</label></th>
+        <td><input name="dotted_color2" class="color" id="dotted_color2" value="#A5A3A2" /></td>
+    </tr>
+        
+         <tr>
+        <th><label for="padd_color">Фон контрастных подложек</label></th>
+        <td><input name="padd_color" class="color" id="padd_color" value="#ffffff" /></td>
+    </tr>
+         <tr>
+        <th><label for="padd_color2">Фон отдельных небольших элементов</label>
+            <small>(Сортировка, пейджинация, варианты)</small>
+           </th>
+        <td><input name="padd_color2" class="color" id="padd_color2" value="#BCBBBA" /></td>
+    </tr>
+         <tr>
+        <th><label for="ceo_bg">Фон блока CEO</label></th>
+        <td><input name="ceo_bg" class="color" id="ceo_bg" value="#F3E7D0" /></td>
+    </tr>
+        
+        <tr>
+          <td colspan="2">
+            <h2>Кнопки</h2>
+            <hr />
+          </td>         
+        </tr>
+        
+        <tr>
+          <th>
+            <label for="block_button">Блокировать кнопку купить при нулевом остатке?</label>
+          </th>
+          <td>
+            <input name="block_button" id="block_button" value="1" type="checkbox" />
+          </td>
+        </tr>   
+        
+        <tr>
+        <th><label for="button_color">Цвет текста на кнопке</label></th>
+        <td><input name="button_color" class="color" id="button_color" value="#ffffff" /></td>
+    </tr>
+        
+        <tr>
+        <th><label for="button_bg">Фон кнопки</label></th>
+        <td><input name="button_bg" class="color" id="button_bg" value="#c5c3c3" /></td>
+    </tr>
+        <tr>
+        <th><label for="button_grad">Фон градиента кнопки</label></th>
+        <td><input name="button_grad" class="color" id="button_grad" value="#979595" /></td>
+    </tr>
+        <tr>
+        <th><label for="checkout_bg">Фон кнопки Оформить заказ</label></th>
+        <td><input name="checkout_bg" class="color" id="checkout_bg" value="#FE751A" /></td>
+    </tr>
+        <tr>
+        <th><label for="checkout_grad">Градиент кнопки Оформить заказ</label></th>
+        <td><input name="checkout_grad" class="color" id="checkout_grad" value="#D35413" /></td>
+    </tr>
+        <tr>
+        <th><label for="status_color">Цвет текста ярлычков</label></th>
+        <td><input name="status_color" class="color" id="status_color" value="#ffffff" /></td>
+    </tr>
+         <tr>
+        <th><label for="status_bg1">Градиент ярлычков ОТ</label></th>
+        <td><input name="status_bg1" class="color" id="status_bg1" value="#ffffff" /></td>
+    </tr>
+        <tr>
+        <th><label for="status_bg2">Градиент ярлычков ДО</label></th>
+        <td><input name="status_bg2" class="color" id="status_bg2" value="#ffffff" /></td>
+    </tr>
+      </table>
+    </fieldset>
+    <fieldset>
+      <legend>ШАПКА</legend>
+      <table>
+         <tr>
+          <th>
+            <label for="header_bg_color">Цвет фона шапки</label>
+          </th>
+          <td>
+            <input name="header_bg_color" class="color" id="header_bg_color" value="#3C3633" />
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="header_use_bg_image">Использовать фоновое изображение для шапки?</label>
+          </th>
+          <td>
+            <input name="header_use_bg_image" id="header_use_bg_image" value="1" type="checkbox" checked />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label for="header_bg_image">Выбрать</label>
+          </td>
+          <td>
+            <select name="header_bg_image" id="header_bg_image">
+              <option value="header.png" selected>Вариант 1</option>
+              <option value="header2.png">Вариант 2</option>
+              <option class="loaded" value="header_bg-loaded.png">Загруженное изображение</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="header_loaded_bg">Загрузить своё</label>
+          </th>
+          <td>
+            <input name="header_bg-loaded.png" id="header_loaded_bg" type="file" />
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="header_bg_image_position">Местоположение</label>
+          </th>
+          <td id="header_bg_image_position">
+            <select name="header_bg_image_y_position" id="header_bg_image_y_position">
+              <option value="top">Сверху</option>
+              <option value="center" selected>По центру</option>
+              <option value="bottom">Снизу</option>
+            </select>
+            <select name="header_bg_image_x_position" id="header_bg_image_x_position">
+              <option selected value="left">Слева</option>
+              <option value="center">По центру</option>
+              <option value="right">Справа</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="header_bg_image_repeat">Повтор</label>
+          </th>
+          <td>
+            <select name="header_bg_image_repeat" id="header_bg_image_repeat">
+              <option value="no-repeat">Не повторять</option>
+              <option value="repeat-x">По горизонтали</option>
+              <option value="repeat-y">По вертикали</option>
+              <option value="repeat" selected>Во всех направлениях</option>
+            </select>
+          </td>
+        </tr>
+        
+
+        
+        
+        <tr>
+          <td colspan="2">
+            <h2>Логотип и название магазина</h2>
+            <hr />
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="use_logo_image">Использовать логотип?</label>
+          </th>
+          <td>
+            <input name="use_logo_image" id="use_logo_image" value="1" type="checkbox" checked />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label for="logo_image">Выбрать</label>
+          </td>
+          <td>
+            <select name="logo_image" id="logo_image">
+              <option value="logo.png" selected>По умолчанию</option>              
+              <option class="loaded" value="loaded_logo.png">Загруженное изображение</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="loaded_logo">Загрузить свой</label>
+          </th>
+          <td>
+            <input type="file" id="loaded_logo" name="loaded_logo.png" data-max-width="340" data-max-height="150"
+            />
+            <small>Максимальная высота 150px, максимальная ширина 340px</small>
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="show_shop_name">Отображать название магазина вместо логотипа?</label>
+          </th>
+          <td>
+            <input name="show_shop_name" id="show_shop_name" value="" type="checkbox" />
+          </td>
+        </tr>
+         <tr>
+        <th><label for="logo_color">Цвет название магазина</label></th>
+        <td><input name="logo_color" class="color" id="logo_color" value="#463F3D" /></td>
+    </tr>
+         <tr>
+        <th><label for="logo_bg">Фон название магазина</label></th>
+        <td><input name="logo_bg" class="color" id="logo_bg" value="#ffffff" /></td>
+    </tr>
+        
+        <tr>
+          <td colspan="2">
+            <h2>Корзина в шапке</h2>
+            <hr />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label for="cart_icon">Иконка корзины</label>
+          </td>
+          <td>
+            <select name="cart_icon" id="cart_icon">
+              <option value="cart.png" selected>По умолчанию</option>
+              <option class="loaded" value="loaded_cart.png">Загруженное изображение</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="loaded_cart">Загрузить свою иконку</label>
+          </th>
+          <td>
+            <input type="file" id="loaded_cart" name="loaded_cart.png" data-max-width="124" data-max-height="48"
+            />
+            <small>Максимальная высота 124px, максимальная ширина 48px</small>
+          </td>
+        </tr>
+         <tr>
+        <th><label for="cart_link_color">Цвет ссылок в корзине</label></th>
+        <td><input name="cart_link_color" class="color" id="cart_link_color" value="#FE6316" /></td>
+    </tr>
+        <tr>
+        <th><label for="cart_bg_color">Цвет фона корзины</label></th>
+        <td><input name="cart_bg_color" class="color" id="cart_bg_color" value="#ffffff" /></td>
+    </tr>
+        
+        <tr>
+          <td colspan="2">
+            <h2>Телефон</h2>
+            <hr />
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="show_phone">Показывать телефон?</label>
+          </th>
+          <td>
+            <input name="show_phone" id="show_phone" value="1" type="checkbox" checked />
+          </td>
+        </tr>
+        
+         <tr>
+        <th><label for="header_links">Цвет ссылок в шапке</label></th>
+        <td><input name="header_links" class="color" id="header_links" value="#D4D3D3" /></td>
+    </tr>
+        <tr>
+        <th><label for="search_padd">Цвет подложки поиска</label></th>
+        <td><input name="search_padd" class="color" id="search_padd" value="#3C3734" /></td>
+    </tr>
+        <tr>
+        <th><label for="search_icon">Цвет иконки поиска</label></th>
+        <td><input name="search_icon" class="color" id="search_icon" value="#D4D3D3" /></td>
+    </tr>
+        
+      </table>
+    </fieldset>
+
+
+ <fieldset>
+      <legend>КАТАЛОГ</legend>
+      <table>
+        
+        
+        <tr>
+        <th><label for="cat_bg">Фон каталога</label></th>
+        <td><input name="cat_bg" class="color" id="cat_bg" value="#333333" /></td>
+    </tr>
+        <tr>
+        <th><label for="cat_sub_bg">Фон выпадающего меню</label></th>
+        <td><input name="cat_sub_bg" class="color" id="cat_sub_bg" value="#E8D9BC" /></td>
+    </tr>
+        <tr>
+        <th><label for="li_color">Цвет пунктов</label></th>
+        <td><input name="li_color" class="color" id="li_color" value="#463F3D" /></td>
+    </tr>
+        
+        <tr>
+        <th><label for="sub_color">Цвет подпунктов</label></th>
+        <td><input name="sub_color" class="color" id="sub_color" value="#A5A3A2" /></td>
+    </tr>
+        <tr>
+        <th><label for="active_li_color">Цвет активных пунктов</label></th>
+        <td><input name="active_li_color" class="color" id="active_li_color" value="#FE6316" /></td>
+    </tr>
+        
+        <tr>
+        <th><label for="active_sub_color">Цвет активных подпунктов</label></th>
+        <td><input name="active_sub_color" class="color" id="active_sub_color" value="#463F3D" /></td>
+    </tr>
+        <tr>
+        <th><label for="active_sub_bg">Фон активных подпунктов</label></th>
+        <td><input name="active_sub_bg" class="color" id="active_sub_bg" value="#FAF5EC" /></td>
+    </tr>
+        
+       
+        
+   </table>
+</fieldset>
+ <fieldset>
+      <legend>ПОДВАЛ</legend>
+      <table>
+       
+       <tr>
+        <th><label for="footer_color">Цвет ссылок</label></th>
+        <td><input name="footer_color" class="color" id="footer_color" value="#463F3D" /></td>
+    </tr> 
+        
+        
+   </table>
+</fieldset>
+    <fieldset>
+      <legend>Главная страница</legend>
+      <h2>Показывать товары или категории?</h2>
+      <table><tr><td><input type="radio" name="show_main_collections" value="true" checked/><label for="show_main_collections">Категории</label></td>
+        <td><input type="radio" name="show_main_collections" value="false" /><label for="show_main_collections">Товары</label></td></tr></table>
+      <h2>Слайдер</h2>
+      <table>
+        <tr>
+          <th>
+            <label for="arr_color">Цвет стрелок</label>
+          </th>
+          <td>
+            <input name="arr_color" class="color" id="arr_color" value="#D6D6D6" />
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <h3>Подложка слайдера</h3>
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="slider_bg_color">Цвет подложки</label>
+          </th>
+          <td>
+            <input name="slider_bg_color" class="color" id="slider_bg_color" value="#F1F1F1" />
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="use_slider_bg_image">Использовать изображение подложки?</label>
+          </th>
+          <td>
+            <input name="use_slider_bg_image" id="use_slider_bg_image" value="1" type="checkbox" checked />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label for="slider_bg_image">Выбрать</label>
+          </td>
+          <td>
+            <select name="slider_bg_image" id="slider_bg_image">
+              <option value="slider_bg.png" selected>Вариант 1</option>
+              <option value="slider_bg2.png">Вариант 2</option>
+              <option class="loaded" value="slider_bg-loaded.png">Загруженное изображение</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="slider_loaded_bg">Загрузить своё</label>
+          </th>
+          <td>
+            <input name="slider_bg-loaded.png" id="slider_loaded_bg" type="file" />
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <h3>Изображения на главной странице</h3>
+            <small>Максимальная высота 260px, максимальная ширина 980px</small>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label for="show_main_image_1">Показывать первое изображение?</label>
+          </td>
+          <td>
+            <input name="show_main_image_1" id="show_main_image_1" value="1" type="checkbox" checked />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label for="main_image_1_link">Ссылка с первого изображения</label>
+          </td>
+          <td>
+            <input name="main_image_1_link" id="main_image_1_link" value="/" />
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="loaded_main_image_1">Загрузить своё первое изображение</label>
+          </th>
+          <td>
+            <input name="loaded_main_image_1.jpg" data-max-width="980" id="loaded_main_image_1" type="file" data-max-height="260"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label for="show_main_image_2">Показывать второе изображение?</label>
+          </td>
+          <td>
+            <input name="show_main_image_2" id="show_main_image_2" value="1" type="checkbox" checked />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label for="main_image_2_link">Ссылка со второго изображения</label>
+          </td>
+          <td>
+            <input name="main_image_2_link" id="main_image_2_link" value="/" />
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="loaded_main_image_2">Загрузить своё второе изображение</label>
+          </th>
+          <td>
+            <input name="loaded_main_image_2.jpg" data-max-width="980" id="loaded_main_image_2" type="file" data-max-height="260"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label for="show_main_image_3">Показывать третье изображение?</label>
+          </td>
+          <td>
+            <input name="show_main_image_3" id="show_main_image_3" value="" type="checkbox" />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label for="main_image_3_link">Ссылка с третьего изображения</label>
+          </td>
+          <td>
+            <input name="main_image_3_link" id="main_image_3_link" value="" />
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="loaded_main_image_3">Загрузить своё третье изображение</label>
+          </th>
+          <td>
+            <input name="loaded_main_image_3.jpg" data-max-width="980" id="loaded_main_image_3" type="file" data-max-height="260"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label for="show_main_image_4">Показывать четвертое изображение?</label>
+          </td>
+          <td>
+            <input name="show_main_image_4" id="show_main_image_4" value="" type="checkbox" />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label for="main_image_4_link">Ссылка с четвертого изображения</label>
+          </td>
+          <td>
+            <input name="main_image_4_link" id="main_image_4_link" value="" />
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="loaded_main_image_4">Загрузить своё четвертое изображение</label>
+          </th>
+          <td>
+            <input name="loaded_main_image_4.jpg" data-max-width="980" id="loaded_main_image_4" type="file" data-max-height="260"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label for="show_main_image_5">Показывать пятое изображение?</label>
+          </td>
+          <td>
+            <input name="show_main_image_5" id="show_main_image_5" value="" type="checkbox" />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label for="main_image_5_link">Ссылка с пятого изображения</label>
+          </td>
+          <td>
+            <input name="main_image_5_link" id="main_image_5_link" value="" />
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="loaded_main_image_5">Загрузить своё пятое изображение</label>
+          </th>
+          <td>
+            <input name="loaded_main_image_5.jpg" data-max-width="980" id="loaded_main_image_5" type="file" data-max-height="260"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label for="show_main_image_slider">Включить автоматическую смену изображений</label>
+          </td>
+          <td>
+            <input name="show_main_image_slider" id="show_main_image_slider" value="1" type="checkbox" checked />
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="show_main_image_effect">Эффект</label>
+          </th>
+          <td>
+            <select name="show_main_image_effect" id="show_main_image_effect">
+              <option value="scrollHorz">Scroll</option>
+              <option value="fade" selected>Fade</option>
+              <option value="wipe">Wipe</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label for="show_main_image_timeout">Время показа изображения (в милисекундах)</label>
+          </td>
+          <td>
+            <input name="show_main_image_timeout" id="show_main_image_timeout" value="4000" />
+          </td>
+        </tr>
+      </table>
+      <h2>СОЦ. СЕТИ</h2>
+      <table>
+        <tr>
+          <td>
+            <label for="fb_social">Виджет группы FACEBOOK</label>
+            <small>Получить код <a href="https://developers.facebook.com/docs/reference/plugins/like-box/" target="_blank">тут</a></small>
+          </td>
+          <td>
+            <input name="fb_social" id="fb_social" value="" />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label for="vk_social">Виджет группы VK</label>
+            <small>Получить ID <a href="http://vk.com/dev/Community" target="_blank">тут</a></small>
+          </td>
+          <td>
+            <input name="vk_social" id="vk_social" value="20003922" />
+            <small>Вставлять только ID!</small>
+          </td>
+        </tr>
+   </table>
+    </fieldset>

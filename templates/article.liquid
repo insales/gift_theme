@@ -1,0 +1,101 @@
+<div class="">
+<h1>{{article.title}}</h1>
+                      <div class="content editor-content">                          
+                        <script type="text/javascript">
+                                                  $(function(){
+                                                    // $(".comments").hide();
+                                                    var anchor = $(document).attr('location').hash;
+                                                    if (anchor == "#comments" || anchor == "#comment_form") {
+                                                  $('#content>h1').css('padding-top','12px');
+                                                  $("ul.comments").show(); 
+                                                  }
+                                                      $("#comments_link").click(function(e){
+                                                        e.preventDefault();
+                                                        $("ul.comments").toggle();
+                                                      });
+                                                    });
+                                                </script>
+                        <div class="article">
+                          <div>
+                            <p class="user"></p>
+                            <p class="date"> Опубликовано {{ article.created_at | date: "%d.%m.%Y" }}, автор {{ article.author }}</p>
+                            <div class="editor-content">
+                              {{ article.content }}
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {% if blog.comments_enabled? %}
+                        <div id="comments">
+                          <h3><a name="comments" href="#" id="comments_link">Комментарии: {{article.comments_count}}</a></h3>
+                          <!-- List all comments -->
+                          {% if article.comments == empty %}
+                          <p class="box"><em>Пока нет комментариев</em></p>
+                          {% else %}
+                          <ul class="comments">
+                            {% for comment in article.comments %}
+                            <li class="{% if forloop.last %}last{% endif %}">
+                              <div class="comment">
+                                {{ comment.content | newline_to_br }}
+                              </div>
+                              <div class="date">
+                                Добавил(а) {{ comment.author }} , {{ comment.created_at | date: "%d.%m.%Y %H:%M" }}
+                              </div>
+                            </li>
+                            {% endfor %}
+                          </ul>
+                          {% endif %}
+                        </div>
+                        <div id="comment_form">
+                          <!-- Comment Form -->
+                         
+                       
+                          <div style="padding-left: 20px;">
+                            {% form comment %}
+                            {% if form.posted_successfully? %}
+                            {% if blog.moderated? %}
+                            <div class="notice">
+                              Комментарий успешно отправлен.<br />
+                              Он будет промодерирован владельцем блога перед публикацией.
+                            </div>
+                            {% else %}
+                            <div class="notice">Комментарий добавлен.</div>
+                            {% endif %}
+                            {% endif %}
+                            {% if comment.errors.size > 0 %}
+                            <div class="notice error">Не все поля заполнены правильно!</div>
+                            {% endif %}
+                            <label for="comment_author" class="{% if comment.errors contains 'author' %}error{% endif %}">Имя&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <input type="text" id="comment_author" name="comment[author]" value="{{comment.author}}" class="{% if comment.errors contains 'author' %}input-error{% endif %} txt" style="width: 200px;" />
+                            <br />
+                            <label for="comment_email" class="{% if comment.errors contains 'email' %}error{% endif %}">E-mail&nbsp;</label>
+                            <input type="text" id="comment_email" name="comment[email]" value="{{comment.email}}" class="{% if comment.errors contains 'email' %}input-error{% endif %} txt" style="width: 200px;" />
+                            <br />
+                            <label for="comment_body" class="{% if comment.errors contains 'content' %}error{% endif %}">Комментарий</label>
+                            <textarea id="comment_body" name="comment[content]" cols="32" rows="4" class="{% if comment.errors contains 'content' %}input-error{% endif %}">{{comment.content}}</textarea>
+                            {% if comment.captcha_enabled? %}
+                            <div id="captcha">
+                              <div id="captcha_challenge">
+                                {{ comment | captcha_challenge }}
+                              </div>
+                              <input type="text" size="30" name="comment[captcha_solution]" id="comment_captcha_solution" class="textfield txt {% if comment.errors contains 'captcha_solution' %}input-error{% endif %}" style="width: 120px; margin-top: 7px;" />
+                              <br/><small>Наберите текст, изображённый на картинке</small><br /><br />
+                            </div>
+                            {% endif %}
+                            
+                            <div class="buy-button button fl clear" style="margin-left: -30px;">
+				 <span>
+				  <input type="submit" value="Отправить комментарий">
+				 </span>
+				</div>
+                           
+                            <p class="small clear" style="margin-top: 7px;">Все поля обязательны к заполнению.</p>
+                            {% if blog.moderated? %}
+                            <div id="moderation_warning">Перед публикацией комментарии проходят модерацию.</div>
+                            {% endif %}
+                            {% endform %}
+                          </div>
+                        </div>
+                        {% endif %}
+                        </div>
+</div>

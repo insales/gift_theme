@@ -1,0 +1,84 @@
+<h1><strong>{{collection.title}}</strong></h1>
+{% if collection.description %}
+<div class="cat-descr editor-content">
+  {{collection.description}}
+</div>
+{% endif %}
+
+{% if collection.products.size > 0 %}
+{% assign filtered = false %}
+ {% for property in collection.properties %}
+   {% for characteristic in property.characteristics %}
+         {% if characteristic.current? %}{% assign filtered = true %}{% endif %}
+   {% endfor %}
+ {% endfor %}
+
+{% paginate products by 18 %}
+
+<div class="sort-wrap">
+  {% if paginate.parts.size > 1 %}
+  {% include 'pagination' %}
+  {% endif %}
+  <div class="sorting fr">
+    <label for="" class="fl">Сортировать</label>
+    <div class="select-wrap fl">
+      <select name="order" title="sort-form" class="select" onchange="orderProducts($(this));">  
+       {{ "-" | select_option: order, "" }} 
+       {{ "price"  | select_option: order, "Цене ↑" }}
+       {{ "descending_price"  | select_option: order, "Цене ↓" }} 
+       {{ "title"  | select_option: order, "Алфавиту ↑" }} 
+       {{ "descending_title"  | select_option: order, "Алфавиту ↓" }} 
+       {{ "age"  | select_option: order, "Дате ↑" }} 
+        {{ "descending_age"  | select_option: order, "Дате ↓" }} 
+ </select>
+    </div>	   
+  </div>
+</div>
+{% for product in products %}
+{% include 'product_block' %}
+{% endfor %}
+<div class="clear"></div>
+{% if paginate.parts.size > 1 %}
+{% include 'pagination' %}
+{% endif %}
+<div class="clear"></div>
+{% endpaginate %}
+{% else %}
+{% if collection.subcollections.size > 0 %}
+<div class="collections fl">
+  {% for collection in collection.subcollections %}
+  <div class="col-block" style="{% cycle '','','','margin-right: 0;' %}">
+    <a href="{{collection.url}}" class="img">
+      <img src="{% if collection.image.original_url contains 'no_image' %}
+        {% if collection.products.size > 0 %}
+          {% for product in collection.products %}{% if forloop.first %}{{product.first_image.compact_url}}{% endif %}{% endfor %}
+        {% else %}
+          {{collection.image.compact_url}}
+        {% endif %}
+      {% else %}
+        {{collection.image.compact_url}}
+      {% endif %}" />
+    </a>
+    <p><a href="{{collection.url}}">{{collection.title}}</a></p>
+    <ul>
+      {% for sub in collection.subcollections %}
+      <li><a href="{{sub.url}}">{{sub.title}}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+{% if filtered %}
+  По заданным параметрам товаров не найдено
+  {% else %}
+
+  В данной категории товары отсутствуют
+  {% endif %}
+{% endif %}
+{% endif %}
+{% if collection.seo_description %}
+<div class="cat-descr editor-content">
+  {{collection.seo_description}}
+</div>
+{% endif %}

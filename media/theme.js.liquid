@@ -1,0 +1,125 @@
+jQuery.fn.extend({
+  live: function( types, data, fn ) {
+          if( window.console && console.warn ) {
+           console.warn( "jQuery.live is deprecated. Use jQuery.on instead." );
+          }
+
+          jQuery( this.context ).on( types, this.selector, data, fn );
+          return this;
+        }
+});
+
+$(document).ready(function () {
+        
+        new InSales.Cart({
+          selector: 'input.buy',
+          draw: function (cart) {
+            $('#cart_items_count').html(cart.items_count);
+			$('#cart_total_price').html(InSales.formatMoney(cart.items_price, cv_currency_format));            
+            
+            this.addCallback = function () {
+              this.reloadCart(function () {
+                cart.draw();
+                set_preloaders_message('<div id="add_product_notification"><h2>Товар добавлен в корзину</h2><a href="#" class="closeCartMsg fl small-button">Закрыть</a><a href="/cart_items" class="fr small-button">В корзину</a></div>');
+                //window.setTimeout( hide_preloader, 1000);
+
+              });
+            }
+          }
+        });
+
+        $('.closeCartMsg').live('click', function (e) {
+          e.preventDefault();
+          hide_preloader();
+        });
+
+
+        // селекты
+        $('select.select').each(function () {
+          var title = $(this).attr('title');
+          if ($('option:selected', this).val() != '') title = $('option:selected', this).text();
+          $(this).css({
+            'z-index': 10,
+            'opacity': 0,
+            '-khtml-appearance': 'none'
+          }).after('<span class="select">' + title + '</span>').change(function () {
+            val = $('option:selected', this).text();
+            $(this).next().text(val);
+          })
+        });
+  
+       
+
+        // каталог
+        $('.cat-arrow').click(function (e) {
+          e.preventDefault();
+          $('.head-catalog>li.hidden').toggle();
+          $('.cat-arrow').toggleClass('rotate');
+        });
+
+        // каталог фикс пунктов
+        var catalogLength = 806;
+        var itemsLength = 0;
+        $('.head-catalog>li').each(function () {
+          itemsLength = itemsLength + +$(this).width();
+          if (itemsLength > catalogLength) {
+            $(this).addClass('hidden');
+          } else {
+            $(this).removeClass('hidden');
+          }
+        });
+
+        if ($('.head-catalog li.hidden').size() == 0) {
+          $('.cat-arrow').hide();
+        }
+
+// слайдер
+var slides = $('#slider li').size();    
+      if(slides>1) {  
+    var slider_timeout = {{settings.show_main_image_timeout}};  
+    var slider_effect = '{{settings.show_main_image_effect}}';
+    $('#slider').cycle({
+    fx: slider_effect,
+next: '#slider-next',
+prev: '#slider-prev',
+   {% if settings.show_main_image_effect == 'wipe' %}
+    speed: 400,
+    {% else %}
+    speed: 900,
+    {% endif %}
+    pager:  '#nav'{% if settings.show_main_image_slider %}, timeout: slider_timeout{% else %}, 
+    timeout: 0 {% endif %} 
+    
+  });
+}
+                  
+ /* --- */
+
+   $('.touch .head-catalog > li a').on('click', function (e) {
+        e.preventDefault();     
+     if ($(this).next('.subnav').size() > 0) {
+     	if ($(this).hasClass('touch-active') || $(this).parents('.touch-active:first').size() > 0) {   
+     	  location.href = $(this).attr('href');         
+        } else {
+          $('.touch .head-catalog li').removeClass('touch-active');
+          $(this).parents('li:last').addClass('touch-active');
+        }
+     } else {
+     location.href = $(this).attr('href');    
+     }
+    
+   });               
+                  
+                  
+
+ /* ---- */                 
+              
+});
+
+//синхронизировать фильтр и сортировку
+  function orderProducts(select) {
+    var opt = select.val();
+    var formSelect = $('select[id="' + select.attr("title") + '"]');
+    formSelect.find('option[value="' + opt + '"]').attr('selected', true);
+    $('#characteristics').submit();
+  }

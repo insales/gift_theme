@@ -1,0 +1,23 @@
+<div class="prod-block {% unless wide %}{% cycle 'group1' : '','','side' %}{% else %}{% cycle 'group1' : '','','','side' %}{% endunless %}">  
+ {% if product.properties.status.characteristics.size %}
+  <span class="status"><span>{{ product.properties.status.characteristics.first.name }}</span></span>
+    {% endif %}
+  <a href="{{product.url}}" class="img">
+    <img src="{{product.first_image.medium_url}}" />
+  </a>
+  <p class="title">
+    <a href="{{product.url}}">
+      {{product.title}}
+    </a>
+  </p>
+  <div class="descr">
+    {% if template == 'product' %}
+    {{product.description }}
+    {% else %}
+    {{product.short_description}}
+    {% endif %}
+  </div>
+  <div class="buyzone">
+    <p class="price fl"><del>{{product.old_price | money}}</del>{{product.sale_price | money}}</p>
+  </div>
+</div>

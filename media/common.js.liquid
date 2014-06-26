@@ -1,0 +1,371 @@
+/* карточка товара выбор модификаций */
+
+$(function(){
+  $('.selector-wrapper li').live('click', function(){
+    $(this).parents('ul:first').find('li').removeClass('active').removeAttr('selected');
+    $(this).addClass('active').attr('selected','selected').trigger('change');
+    $(this).parents('ul:first').trigger('change');
+  });
+});
+
+
+InSales.OptionSelectors = function(existingSelectorId, options) {
+    if ($("#"+existingSelectorId).attr("id") == undefined) return false
+
+    // insert new multi-selectors and hide original selector
+    this.replaceSelector = function(domId) {
+        var oldSelector = document.getElementById(domId);
+        var parent = oldSelector.parentNode;
+        jQuery.each(this.buildSelectors(), function(index,el) {
+            parent.insertBefore(el, oldSelector);
+        });
+        oldSelector.style.display = 'none';
+        this.variantIdField = oldSelector;
+    };
+
+    // buildSelectors(index)
+    // create and return new selector element for given option
+    this.buildSelectors = function() {
+        // build selectors
+        for (var i = 0; i < this.product.optionNames().length; i++) {
+            var sel = new InSales.SingleOptionSelector(this, i, this.product.optionNames()[i], this.product.optionValues(i));
+            sel.element.disabled = false;
+            this.selectors.push(sel);
+        }
+
+        // replace existing selector with new selectors, new hidden input field, new hidden messageElement
+        var divClass = this.selectorDivClass;
+        var optionNames = this.product.optionNames();
+        var elements = [];
+        jQuery.each(this.selectors, function(index,selector) {
+            var div = document.createElement('div');
+            div.setAttribute('class', divClass);
+            // create label if more than 1 option (ie: more than one drop down)
+            if (optionNames.length > 1 || optionNames[0].title != 'Модификация') {
+                // create and appened a label into div
+                var label = document.createElement('label');
+                label.innerHTML = selector.name;
+                div.appendChild(label);
+            }
+            div.appendChild(selector.element);
+            elements.push(div);
+        });
+        return elements;
+    };
+
+     // returns array of currently selected values from all multiselectors
+      this.selectedValues = function () {
+        var currValues = {};       
+        for (var i = 0; i < this.selectors.length; i++) {        
+          var selector = this.selectors[i];
+          var thisValue = $(this.selectors[i].element).find('li[selected="selected"]').attr('value');                  
+          currValues[selector.option_id] = thisValue;         
+        }      
+        return currValues;       
+      };
+
+    this.getCurrVariant = function() {
+        var currValues = this.selectedValues(); // get current values        
+        return this.product.getVariant(currValues);    
+    };
+
+    // callback when a selector is updated.
+    this.updateSelectors = function(index) {
+        var variant    = this.getCurrVariant();
+        if (variant) {
+            this.variantIdField.disabled = false;
+            this.variantIdField.value = variant.id; // update hidden selector with new variant id
+        } else {
+            this.variantIdField.disabled = true;
+        }
+        this.onVariantSelected(variant, this);  // callback
+    };
+
+    this.selectAvailableVariant = function() {
+        var values = {};
+        for (var i = 0; i < this.product.variants.length; i++) {
+            var variant = this.product.variants[i];
+            if (!variant.available) continue;
+            jQuery.each(variant.option_values, function(index,option_value) {
+                values[option_value.option_name_id] = option_value.id;
+            });
+            break;
+        }
+        jQuery.each(this.selectors, function(index,selector) {
+            selector.selectValue(values[selector.option_id]);
+        });
+        this.selectors[0].element.onchange();     // init the new dropdown
+    };
+   
+ 
+      this.filterOptionValues = function(){
+        // Создаём массив значений св-в каждой модификации
+        var variants_option_values = [];
+        for (var i = 0; i < this.product.variants.length; i++) {
+            var variant = this.product.variants[i];
+            //if (!variant.available) continue;
+            var variant_option_values = []
+            jQuery.each(variant.option_values, function(index,option_value) {
+                variant_option_values.push(option_value);
+            });
+            variants_option_values.push(variant_option_values)
+        }
+
+        var id_prefix = 'variant-select-option-';
+        var max_option_name_index = jQuery('.single-option-selector').size() - 1;
+        // При выборе значения св-ва у следующего св-ва оставляем только те значения, которые могут быть у товара при выбранных предыдущих значениях
+        jQuery('.single-option-selector').live('change',function(){
+        
+            var selected_option_value_id = $(this).find('li[selected="selected"]').attr('value');
+            var id = jQuery(this).attr('id');
+            var option_name_index = parseInt(id.replace(id_prefix,''));
+            if (option_name_index == max_option_name_index) return;
+            var next_option_name_index = option_name_index + 1;
+            var option_values = [];
+            jQuery.each(variants_option_values, function(index,variant_option_values){
+                var current_option_value = variant_option_values[option_name_index];
+                if (current_option_value.id == selected_option_value_id) {
+                    var allowed_option_value = true
+                    // проходимся по ранее выбранным значениям св-в
+                    for (var i=option_name_index; i >= 0; i--){
+                        var prev_current_option_value_id = jQuery("#"+id_prefix+i).find('li[selected="selected"]').attr('value');
+                        if (variant_option_values[i].id != prev_current_option_value_id) allowed_option_value = false;
+                    }
+                    if (allowed_option_value){
+                        var next_option_value = variant_option_values[next_option_name_index];
+                        option_values = jQuery.grep(option_values, function (option_value) {return option_value.id != next_option_value.id;});
+                        option_values.push(next_option_value);
+                    }
+                }
+            });
+
+            var next_option_values_select = jQuery("#"+id_prefix+next_option_name_index);
+            var next_selected_option_value_id = next_option_values_select.find('li[selected="selected"]').attr('value');
+            var lis = "";
+            jQuery.each(option_values, function(i){
+                var selected = "";
+                if (this.id == next_selected_option_value_id) selected = "selected='selected'";
+              if (i == 0) {
+                lis += "<li class='active' selected='selected' value='"+this.id+"'>"+this.title+"</li>";
+              } else {
+                lis += "<li value='"+this.id+"' "+ selected +">"+this.title+"</li>";
+              }
+               
+            });
+            next_option_values_select.html(lis);
+            next_option_values_select.trigger('change');
+        });
+
+        $("#"+id_prefix+0).trigger('change');
+    }              
+
+    this.selectorDivClass       = 'selector-wrapper';
+    this.selectorClass          = 'single-option-selector';
+    this.variantIdFieldIdSuffix = '-variant-id';
+
+    this.variantIdField    = null;
+    this.selectors         = [];
+    this.domIdPrefix       = existingSelectorId;
+    this.product           = new InSales.Product(options['product']);
+    this.onVariantSelected = InSales.isDefined(options.onVariantSelected) ? options.onVariantSelected : function(){};
+    this.replaceSelector(existingSelectorId); // create the dropdowns
+    this.selectAvailableVariant();
+    if (options['filterOptionValues']) this.filterOptionValues(); // Поочерёдная фильтрация значения св-в.
+
+    return true;
+
+};
+
+
+
+
+InSales.SingleOptionSelector = function(multiSelector, index, option, values) { 
+    this.selectValue = function(value) {
+        $(this.element).find('li[value="'+value+'"]').each(function(){
+            $(this).attr("selected","selected");
+            $(this).addClass('active');
+        });
+    };
+
+    this.multiSelector = multiSelector;
+    this.values = values;
+    this.index = index;
+    this.name = option['title'];
+    this.option_id = option['id'];  
+    this.element = document.createElement('ul');
+    for (var i = 0; i < values.length; i++) {
+        var opt = document.createElement('li');
+        opt.value = values[i].id;
+        opt.innerHTML = values[i].title;       
+        this.element.appendChild(opt);
+     
+    }
+    this.element.setAttribute('class', this.multiSelector.selectorClass);
+    this.element.id = multiSelector.domIdPrefix + '-option-' + index;
+    this.element.onchange = function() {
+        multiSelector.updateSelectors(index);
+    };
+
+    return true;
+};
+
+
+
+/* корзина */
+function ShowMessage(text, time){
+    var delay = 1000;
+    if (arguments.length  >  1) {
+        delay = time;
+    }
+    show_preloader();
+    set_preloaders_message('<div id="add_product_notification">'+text.replace(" ","&nbsp;")+'</div>');
+    changeCss(jQuery("#own_preloader"));
+    window.setTimeout( hide_preloader, delay);
+}
+
+function cartTriggers(){
+   var open_cart_total = $('.total_amount_s').html()
+
+  // Удаление
+  $(".cart-table .del a").each(function(i) {
+      if ( $(this).attr('in_process') ) { return; }
+    $(this).attr('in_process',true);
+
+    $(this).bind("click dblclick", function(e){
+            e.preventDefault();
+
+          var link = $(this);
+        if ( link.attr('processed') ) { return false; }
+
+        if ( confirm("Уверены, что хотите удалить товар?") ) {
+
+                link.attr('processed',true);
+
+                e.preventDefault();
+                var item_row = link.parents("tr:first");
+                var fields =  new Object;
+                fields['_method'] = 'delete';
+                var path = '/cart_items/'+link.attr("iid").replace("delete_","")+'.json';
+
+          show_preloader();
+
+          $.ajax({
+              url:      path,
+              type:     'post',
+              data:     fields,
+              dataType: 'json',
+              success:  function(response) {
+
+                  link.attr('processed',false);
+              hide_preloader(); // Убираем прелоадер
+
+              if( response.total_price == 0 ){
+                $(".cart-wrap").hide();
+                $(".cart-message").show();
+              }
+
+              item_row.slideUp("normal", function(){
+                  item_row.remove();
+
+                  /* Переставляем индекс */
+                            $("#cartform table td.index:visible").each(function(i){
+                                $(this).html((i+1)+".");
+                            });
+                  });
+
+              $('.total_amount').html(InSales.formatMoney(response.total_price, cv_currency_format));
+                    $("#cart_total_price").html(InSales.formatMoney(response.total_price, cv_currency_format));
+                $("#cart_items_count").html(response.items_count);
+ if( response.items_count == 1){
+             $("#cart_text").html("товар");
+           } else if (response.items_count  >  4  ){
+             $("#cart_text").html("товаров");}
+            else {
+             $("#cart_text").html("товара");
+            }
+
+              },
+              error:  function(response) {
+                if ( link.attr('processed') ) { return false; }
+                  link.attr('processed',false);
+                // alert("произошла ошибка");
+              }
+          });
+        }
+      return false;
+    });
+  });
+
+    // Пересчитать
+    // Массив для хранения
+    qSwaps = [];
+
+    $(".cart-table .quantity input").each(function(i){
+        qSwaps[i] = $(this).val();
+    });
+
+    $(".cart-table .quantity input").each(function(i) {
+        if ( $(this).attr('processed') ) { return; }
+        $(this).attr('processed',true);
+        $(this).bind("change keyup", function(e) {
+            var el = $(this);
+            var value = el.val();
+
+            val = value.replace(/[^\d\.\,]+/g,'');
+            if (val < 0){ /* nothing to do */ }
+            if(val != value) el.val(val);
+
+            if (val == qSwaps[i]) return; // если значение не изменилось - выходим
+
+            qSwaps[i] = val;
+
+            el.parents("tr:first").find(".total-price").html( InSales.formatMoney(val*el.attr('price'), cv_currency_format) )
+            recalculate_order();
+        }).bind('blur',function(){
+            var el = $(this);
+            var value = el.val();
+            val = value.replace(/[^\d\.\,]+/g,'');
+            if (val < 0 || val == ""){ val = 0; }
+            el.val(val);
+
+            el.change();
+        });
+    });
+
+
+    function recalculate_order() {
+    var fields =  new Object;
+    fields = $('#cartform').serialize();
+    //var path   = $('#cartform').attr('action')+'.json';
+      var path = '/cart_items/update_all.json'
+
+    show_preloader(); // Показываем прелоадер
+
+
+    $.ajax({
+        url:      path,
+        type:     'post',
+        data:     fields,
+        dataType: 'json',
+        success:  function(response) {
+            hide_preloader(); // Убираем прелоадер
+            //$(".js_cart_update").hide();
+            $('.total_amount').html( InSales.formatMoney(response.total_price, cv_currency_format) );
+            $("#cart_total_price").html(InSales.formatMoney(response.total_price, cv_currency_format));
+            $("#cart_items_count").html(response.items_count);
+             
+   if( response.items_count == 1){
+             $("#cart_text").html("товар");
+           } else if (response.items_count  >  4  ){
+             $("#cart_text").html("товаров");}
+            else {
+             $("#cart_text").html("товара");
+            }
+            //free_deliver_price();
+        },
+        error:  function(response) {  alert("произошла ошибка"); hide_preloader(); }
+    });
+
+    }
+
+}

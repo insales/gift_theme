@@ -1,0 +1,58 @@
+{% if block_lists.main-page-banners.blocks.size == 0 and settings.fb_social == '' and settings.vk_social == '' %}{% assign wide = true %}{% endif %}
+<div class="collections fl {% if wide %}wide{% endif %}">
+  {% if settings.show_main_collections == 'true' %}
+  {% for collection in collections %}
+  <div class="col-block">
+    <a href="{{collection.url}}" class="img">
+      <img src="{% if collection.image.large_url contains 'no_image' %}
+        {% if collection.products.size > 0 %}
+          {% for product in collection.products %}{% if forloop.first %}{{product.first_image.compact_url}}{% endif %}{% endfor %}
+        {% else %}
+          {{collection.image.compact_url}}
+        {% endif %}
+      {% else %}
+        {{collection.image.compact_url}}
+      {% endif %}" />
+    </a>
+    <p><a href="{{collection.url}}">{{collection.title}}</a></p>
+    <ul>
+      {% for sub in collection.subcollections %}
+      <li><a href="{{sub.url}}">{{sub.title}}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endfor %}
+  {% else %}
+  {% for product in collections.frontpage.products %}
+{% include 'product_block' %}
+{% endfor %}
+  {% endif %}
+</div>
+{% unless wide %}
+<div class="main-banners fr">
+  {% for block in block_lists.main-page-banners.blocks %}
+  <div class="main-banner">
+    {{block.content}}
+  </div>
+  {% endfor %}
+  
+  
+  {% if settings.fb_social != '' %}
+  <div class="main-banner">
+    {{settings.fb_social}}
+  </div>
+  {% endif %}
+  
+  {% if settings.vk_social != '' %}
+  <div class="main-banner">
+    <script type="text/javascript" src="//vk.com/js/api/openapi.js?95"></script>
+
+<!-- VK Widget -->
+<div id="vk_groups"></div>
+<script type="text/javascript">
+  VK.Widgets.Group("vk_groups", {mode: 0, width: "285", height: "290"}, {{settings.vk_social}});
+</script>
+  </div>
+  {% endif %}
+</div>
+{% endunless %}

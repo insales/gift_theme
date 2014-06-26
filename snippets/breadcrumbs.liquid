@@ -1,0 +1,82 @@
+<div class="breadcrumbs">
+  <a href="/">Главная</a> &gt;
+  {% case template %} 
+  {% when 'page' %}
+  <span>{{page.title}}</span>
+  {% when 'search' %}
+  <span>Поиск</span>
+  {% when 'blog' %}
+  <span>{{blog.title}}</span>
+  {% when 'article' %}
+  <a href="{{blog.url}}">{{blog.title}}</a> &gt; <span>{{article.title}}</span>
+  {% when 'cart' %}
+  <span>Корзина</span>
+  {% when 'collection' %}
+   {% if current_collections.size > 0  %}
+    {% for collection in current_collections %}
+     {% if collection.level > 0 %}
+      {% if forloop.last %}
+       <span>{{collection.title}}</span>
+      {% else %}
+       <a href="{{ collection.url }}">{{ collection.title }}</a> &gt;
+      {% endif %}
+     {% endif %} 
+    {% endfor %}
+   {% else %} 
+   {% if product.collections.size > 0 %}
+    {% assign deep_collection = product.collections.first %}
+     {% for collection in product.collections %}  
+      {% if deep_collection.level < collection.level %}
+       {% assign deep_collection = collection %}
+      {% endif %}
+     {% endfor %}
+     {% for collection in deep_collection.current_collections %}
+      {% if collection.level > 0 %}
+       {% if forloop.last %}
+        <span>{{collection.title}}</span>
+       {% else %}
+        <a href="{{ collection.url }}">{{ collection.title }}</a> &gt;
+       {% endif %}
+      {% endif %}
+     {% endfor %}
+    {% endif %}
+   {% endif %} 
+ 
+  {% when 'product' %}
+  {% if current_collections.size > 0 and collection.handle != 'frontpage' %}
+    {% for collection in current_collections %}
+    {% if collection.level > 0 %}
+      {% if forloop.last %}
+        {% if template == 'product' %}
+        <a href="{{ collection.url }}">{{ collection.title }}</a> &gt; <span style="text-decoration: none;">{{product.title}}</span>
+        {% else %}
+        <span>{{collection.title}}</span>
+        {% endif %}
+      {% else %}
+      <a href="{{ collection.url }}">{{ collection.title }}</a> &gt;
+      {% endif %}
+    {% endif %} 
+    {% endfor %}
+  {% else %}
+ 
+  {% if product.collections.size > 0 %}
+  {% assign deep_collection = product.collections.first %}
+  {% for collection in product.collections %}  
+    {% if deep_collection.level < collection.level %}
+    {% assign deep_collection = collection %}
+    {% endif %}
+  {% endfor %}
+  {% for collection in deep_collection.current_collections %}
+    {% if collection.level > 0 %}
+      {% if forloop.last %}      
+        <a href="{{ collection.url }}">{{ collection.title }}</a> &gt; <span style="text-decoration: none;">{{product.title}}</span>      
+      {% else %}
+        <a href="{{ collection.url }}">{{ collection.title }}</a> &gt;
+      {% endif %}
+    {% endif %}
+   {% endfor %}
+  {% endif %}
+  {% endif %}  
+ {% else %}
+ {% endcase %} 
+</div>
